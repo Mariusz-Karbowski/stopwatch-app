@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import FormattedTime from "./components/FormattedTime/FormattedTime";
+import Buttons from "./components/Buttons/Buttons";
+import Container from "./components/Container/Container";
 
-function App() {
+
+const App = () => {
+  const [time, setTime] = useState(0);
+  const [start, setStart] = useState(null);
+  useEffect(() => {
+    let stopwatch = null;
+    if(start) {
+      stopwatch = setInterval(() => {
+        setTime(prevValue => prevValue + 1)
+      }, 1)
+    }
+    return() => {
+      if(stopwatch) clearInterval(stopwatch)
+    };
+  }, [start]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>      
+      <FormattedTime time={time} />
+      <Buttons setTime={setTime} setStart={setStart}></Buttons>      
+    </Container>
   );
 }
-
 export default App;
